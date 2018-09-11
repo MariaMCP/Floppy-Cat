@@ -1,0 +1,121 @@
+//**obj_cat Create Event
+image_speed = 0;
+image_index = 0;
+gravity = 0.25;
+
+
+//**obj_cat Step Event
+//Animation
+if vspeed < 0 {
+    image_index = 0;
+    image_index = 1;
+} else if vspeed >4 {
+    image_index = 2;
+}
+
+
+//Game Over
+//if (y>=132) {
+//    scr_gameover();
+//}
+
+//If you don't want to be able to fly over the pillars
+//if y<=0 {
+//    scr_gameover();
+//}
+
+
+//**obj_cat Glob Left Pressed
+//Sound
+//audio_play_sound(snd_jump,2,false);
+
+//Fly
+vspeed = -4;
+
+//**obj_pillar_bottom Step Event
+//Sound
+//audio_play_sound(snd_jump,2,false);
+
+//Fly
+vspeed = -4;
+
+//**obj_pillar_bottom Step Event
+x -=4;
+if (x<=-64) {
+    instance_destroy();
+}
+
+//**obj_pillar_top Step Event
+x -=4;
+if (x<=-64) {
+    instance_destroy();
+}
+
+//**obj_pillar_top Step Event
+x -=4;
+if (x<=-64) {
+    instance_destroy();
+}
+
+//**obj_pillar_creator Create Event
+//Creates pillars of different heights
+alarm[0] = 48;
+h = choose(108,72,90,128);
+instance_create(room_width + 32, h, obj_pillar_bottom);
+//instance_create(room_width +32, h-32, obj_score_up);
+instance_create(room_width + 32, h-64, obj_pillar_top);
+
+//**obj_pillar_creator Alarm 0
+//Continues to create pillars every 48 frames
+alarm[0] = 48;
+h = choose(108,72,90,128);
+instance_create(room_width + 32, h, obj_pillar_bottom);
+//instance_create(room_width +32, h-32, obj_score_up);
+instance_create(room_width + 32, h-64, obj_pillar_top);
+
+//***Create sound effects at www.bfxr.net for jump and death***
+
+
+//***THIS WILL CAUSE ERRORS IF YOU DO NOT HAVE SOUND, HIGH SCORE, AND MENU ROOM YET***
+//**scr_gameover
+audio_play_sound(snd_death,1,false);
+
+highscore_add("Best ",global.current_score);
+room_goto(rm_menu);
+
+//***Once scr_gameover is added, uncomment the section in obj_cat***
+//***Once scr_gameover is added, create collision events with pillars, add execute script***
+
+//**obj_game_start Glob Left Pressed
+room_goto_next();
+
+//**obj_game_start Draw event
+//Draws the intro
+draw_set_color(c_fuchsia);
+draw_set_font(fnt_game);
+draw_text(x,y,"Click to Play")
+draw_set_color(c_blue)
+draw_text(x+15,y+25,"Floppy Cat")
+draw_set_color(c_white);
+draw_set_font(fnt_credit);
+draw_text(10, y+75, "Music: Cautious Path from SoundJay.com#Thank you HeartBeast for the tutorials!")
+
+//**obj_score_up Step Event
+//Deletes object after it is off the screen
+x -=4;
+if (x<=-64)
+{
+    instance_destroy();
+}
+
+//**obj_score Create Event
+//Sets Global Score at the beginning to 0
+global.current_score = 0
+
+
+//**obj_score Draw Event
+//Draws score to the screen
+draw_set_color(c_fuchsia);
+draw_set_font(fnt_score);
+draw_text(x,y,"Score: "+string(global.current_score));
+
